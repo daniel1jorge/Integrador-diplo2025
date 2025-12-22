@@ -1,3 +1,64 @@
+server:
+  address: 0.0.0.0 
+  port: ${PORT:8080}
 spring:
   application:
-    name: diplo backend
+    name: diploBackend
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:diplo}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: ${DB_USER:root}
+    password: ${DB_PASS:secure_pass22}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  security:
+    user:
+      name: admin
+      password: admin123
+      roles: ADMIN
+  boot:
+    admin:
+      client:
+        instance:
+          metadata:
+            user:
+              name: ${spring.security.user.name}
+              password: ${spring.security.user.password}
+          service-base-url: ${SPRING_BOOT_ADMIN_CLIENT_INSTANCE_BASE_URL:http://localhost:8080}
+
+        url: ${SPRING_BOOT_ADMIN_CLIENT_URL:http://localhost:8081}
+        username: ${SPRING_BOOT_ADMIN_CLIENT_USERNAME:admin}
+        password: ${SPRING_BOOT_ADMIN_CLIENT_PASSWORD:admin1234}
+info:
+  app:
+    name: diploBackend
+    description: Microservicio java + springboot 
+    version: 0.0.1
+  build:
+    java: 21
+    spring-boot: 3.3.5
+  swagger:
+    description: Documentación OpenAPI
+    ui: http://${server.address}:${PORT:8080}/swagger-ui.html
+    api-docs: http://${server.address}:${PORT:8080}/v3/api-docs
+management:
+  address: ${server.address} 
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    loggers:
+      enabled: true
+logging:
+  file:
+    name: logs/app.log
+  level:
+    root: INFO
+    com.diplo: DEBUG
