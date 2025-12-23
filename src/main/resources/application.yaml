@@ -17,11 +17,7 @@ spring:
       hibernate:
         format_sql: true
     open-in-view: false
-  security:
-    user:
-      name: admin
-      password: admin123
-      roles: ADMIN
+
   boot:
     admin:
       client:
@@ -35,6 +31,7 @@ spring:
         url: ${SPRING_BOOT_ADMIN_CLIENT_URL:http://localhost:8081}
         username: ${SPRING_BOOT_ADMIN_CLIENT_USERNAME:admin}
         password: ${SPRING_BOOT_ADMIN_CLIENT_PASSWORD:admin1234}
+
 info:
   app:
     name: diploBackend
@@ -62,3 +59,9 @@ logging:
   level:
     root: INFO
     com.diplo: DEBUG
+
+
+auth:
+  token:
+    expirationInMils: 3600000
+    jwtSecret: 79244226452948404D635166546A576D5A7134743777217A25432A462D
