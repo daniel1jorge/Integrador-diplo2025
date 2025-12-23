@@ -1,0 +1,73 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: diplo
+      MYSQL_ROOT_PASSWORD: secure_pass22
+      MYSQL_ROOT_HOST: "%"
+
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 300M
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: diplo
+      DB_USER: root
+      DB_PASS: secure_pass22
+      # Apunta a SBA usando el nombre del contenedor y el puerto interno
+      SPRING_BOOT_ADMIN_CLIENT_INSTANCE_BASE_URL: http://backend:8080
+      SPRING_BOOT_ADMIN_CLIENT_URL: http://spring-admin:8081
+      SPRING_BOOT_ADMIN_CLIENT_USERNAME: admin
+      SPRING_BOOT_ADMIN_CLIENT_PASSWORD: admin1234
+      JAVA_OPTS: "-Xmx256m -Xms128m"
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 300M
+
+  spring-admin:
+    build:
+      context: ./sba
+      dockerfile: Dockerfile
+    container_name: spring-admin
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_APPLICATION_NAME: spring-admin
+      SPRING_SECURITY_USER_NAME: admin
+      SPRING_SECURITY_USER_PASSWORD: admin1234
+      JAVA_OPTS: "-Xmx198m -Xms128m"
+    deploy:
+      resources:
+        limits:
+          memory: 198M
+
+volumes:
+  mysql-data:

@@ -24,8 +24,8 @@ spring:
         instance:
           metadata:
             user:
-              name: ${spring.security.user.name}
-              password: ${spring.security.user.password}
+              name: admin
+              password: admin123
           service-base-url: ${SPRING_BOOT_ADMIN_CLIENT_INSTANCE_BASE_URL:http://localhost:8080}
 
         url: ${SPRING_BOOT_ADMIN_CLIENT_URL:http://localhost:8081}
