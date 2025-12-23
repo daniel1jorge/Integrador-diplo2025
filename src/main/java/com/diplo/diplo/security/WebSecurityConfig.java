@@ -67,7 +67,8 @@ public class WebSecurityConfig {
                     "/rooms/available-rooms",
                     "/rooms/room/**",
                     "/v3/api-docs/**",
-                    "/swagger-ui/**"
+                    "/swagger-ui/**",
+                    "/actuator/**"
                 ).permitAll()
 
                 // Requieren autenticacion
