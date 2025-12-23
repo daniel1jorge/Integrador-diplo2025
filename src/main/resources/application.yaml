@@ -17,6 +17,11 @@ spring:
       hibernate:
         format_sql: true
     open-in-view: false
+  security:
+    user:
+      name: admin
+      password: admin123
+      roles: ADMIN
 
   boot:
     admin:
@@ -24,8 +29,8 @@ spring:
         instance:
           metadata:
             user:
-              name: admin
-              password: admin123
+              name: ${spring.security.user.name}
+              password: ${spring.security.user.password}
           service-base-url: ${SPRING_BOOT_ADMIN_CLIENT_INSTANCE_BASE_URL:http://localhost:8080}
 
         url: ${SPRING_BOOT_ADMIN_CLIENT_URL:http://localhost:8081}
