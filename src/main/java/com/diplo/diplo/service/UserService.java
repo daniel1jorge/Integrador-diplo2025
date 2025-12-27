@@ -1,9 +1,7 @@
 package com.diplo.diplo.service;
 
 
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,8 +13,9 @@ import com.diplo.diplo.model.User;
 import com.diplo.diplo.repository.RoleRepository;
 import com.diplo.diplo.repository.UserRepository;
 
-import java.util.Collections;
-import java.util.List;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
@@ -34,9 +33,11 @@ public class UserService implements IUserService {
             throw new UserAlreadyExistsException(user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        log.info(user.getPassword());
-        Role userRole = roleRepository.findByName("ROLE_USER").get();
-        user.setRoles(Collections.singletonList(userRole));
+        
+        Role roleUser = roleRepository.findByName("ROLE_USER")
+                .orElseThrow(() -> new RuntimeException("Rol no existe"));
+
+        user.getRoles().add(roleUser);
         return userRepository.save(user);
     }
 

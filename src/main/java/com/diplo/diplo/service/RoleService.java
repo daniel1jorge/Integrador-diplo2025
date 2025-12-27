@@ -1,25 +1,21 @@
 package com.diplo.diplo.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.diplo.diplo.exception.RoleAlreadyExistException;
-import com.diplo.diplo.exception.UserAlreadyExistsException;
 import com.diplo.diplo.model.Role;
 import com.diplo.diplo.model.User;
 import com.diplo.diplo.repository.RoleRepository;
-import com.diplo.diplo.repository.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 
 @Service
 @RequiredArgsConstructor
 public class RoleService implements IRoleService {
     private final RoleRepository roleRepository;
-    private final UserRepository userRepository;
 
     @Override
     public List<Role> getRoles() {
@@ -47,37 +43,73 @@ public class RoleService implements IRoleService {
         return roleRepository.findByName(name).get();
     }
 
-    @Override
-    public User removeUserFromRole(Long userId, Long roleId) {
-        Optional<User> user = userRepository.findById(userId);
-        Optional<Role>  role = roleRepository.findById(roleId);
-        if (role.isPresent() && role.get().getUsers().contains(user.get())){
-            role.get().removeUserFromRole(user.get());
-            roleRepository.save(role.get());
-            return user.get();
-        }
-        throw new UsernameNotFoundException("User not found");
-    }
+	@Override
+	public User removeUserFromRole(Long userId, Long roleId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public User assignRoleToUser(Long userId, Long roleId) {
-        Optional<User> user = userRepository.findById(userId);
-        Optional<Role>  role = roleRepository.findById(roleId);
-        if (user.isPresent() && user.get().getRoles().contains(role.get())){
-            throw new UserAlreadyExistsException(
-                    user.get().getFirstName()+ " is already assigned to the" + role.get().getName()+ " role");
-        }
-        if (role.isPresent()){
-            role.get().assignRoleToUser(user.get());
-            roleRepository.save(role.get());
-        }
-        return user.get();
-    }
+	@Override
+	public User assignRoleToUser(Long userId, Long roleId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public Role removeAllUsersFromRole(Long roleId) {
-        Optional<Role> role = roleRepository.findById(roleId);
-        role.ifPresent(Role::removeAllUsersFromRole);
-        return roleRepository.save(role.get());
-    }
+	@Override
+	public Role removeAllUsersFromRole(Long roleId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+//	@Override
+//	public User removeUserFromRole(Long userId, Long roleId) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public User assignRoleToUser(Long userId, Long roleId) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public Role removeAllUsersFromRole(Long roleId) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
+//    @Override
+//    public User removeUserFromRole(Long userId, Long roleId) {
+//        Optional<User> user = userRepository.findById(userId);
+//        Optional<Role>  role = roleRepository.findById(roleId);
+//        if (role.isPresent() && role.get().getUsers().contains(user.get())){
+//            role.get().removeUserFromRole(user.get());
+//            roleRepository.save(role.get());
+//            return user.get();
+//        }
+//        throw new UsernameNotFoundException("User not found");
+//    }
+//
+//    @Override
+//    public User assignRoleToUser(Long userId, Long roleId) {
+//        Optional<User> user = userRepository.findById(userId);
+//        Optional<Role>  role = roleRepository.findById(roleId);
+//        if (user.isPresent() && user.get().getRoles().contains(role.get())){
+//            throw new UserAlreadyExistsException(
+//                    user.get().getFirstName()+ " is already assigned to the" + role.get().getName()+ " role");
+//        }
+//        if (role.isPresent()){
+//            role.get().assignRoleToUser(user.get());
+//            roleRepository.save(role.get());
+//        }
+//        return user.get();
+//    }
+//
+//    @Override
+//    public Role removeAllUsersFromRole(Long roleId) {
+//        Optional<Role> role = roleRepository.findById(roleId);
+//        role.ifPresent(Role::removeAllUsersFromRole);
+//        return roleRepository.save(role.get());
+//    }
 }
